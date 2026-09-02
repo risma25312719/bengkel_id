@@ -2,54 +2,38 @@
 
 namespace Database\Seeders;
 
+use App\Models\Barang;
+use App\Models\Layanan;
+use App\Models\Pelanggan;
+use App\Models\Transaksi;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class TransaksiSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-       // Data Dummy Transaksi
-DB::table('transaksi')->insert([
-    [
-        'kode_transaksi' => 'TRX-20260902-001',
-        'pelanggan_id' => 1,
-        'nama_perangkat' => 'iPhone X Black',
-        'keluhan_kerusakan' => 'HP mati total, tidak bisa di-charge',
-        'layanan_id' => 2,
-        'barang_id' => 1,
-        'jumlah_barang' => 1,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-    [
-        'kode_transaksi' => 'TRX-20260902-002',
-        'pelanggan_id' => 2,
-        'nama_perangkat' => 'Laptop Asus ROG GL553',
-        'keluhan_kerusakan' => 'Layar pecah/bergaris akibat terbentur',
-        'layanan_id' => 1,
-        'barang_id' => 2,
-        'jumlah_barang' => 1,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-    [
-        'kode_transaksi' => 'TRX-20260902-003',
-        'pelanggan_id' => 3,
-        'nama_perangkat' => 'MacBook Pro 2018',
-        'keluhan_kerusakan' => 'Cepat panas dan kipas berbunyi bising',
-        'layanan_id' => 3,
-        'barang_id' => null,
-        'jumlah_barang' => 0,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ],
-]);
+        $pelanggan = Pelanggan::first();
+        $layanan   = Layanan::first();
+        $barang    = Barang::first();
+
+        if (!$pelanggan) {
+            return;
+        }
+
+        // firstOrCreate akan membuat data BARU hanya jika kode_transaksi belum ada
+        Transaksi::firstOrCreate(
+            ['kode_transaksi' => 'TRX-' . date('Ymd') . '-001'],
+            [
+                'pelanggan_id'     => $pelanggan->id,
+                'layanan_id'       => $layanan ? $layanan->id : null,
+                'barang_id'        => $barang ? $barang->id : null,
+                'nama_perangkat'   => 'iPhone X Black',
+                'keluhan_kerusakan'=> 'HP mati total, tidak bisa di-charge',
+                'jumlah_barang'    => 1,
+                'total_biaya'      => 150000,
+                'status_servis'    => 'proses',
+                'status_bayar'     => 'belum_bayar',
+            ]
+        );
     }
 }
