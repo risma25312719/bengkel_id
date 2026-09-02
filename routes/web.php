@@ -9,7 +9,7 @@ use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes (Laravel 7 - Manual Routing dengan Middleware)
+| Web Routes (Laravel 7 - Fixed Routing)
 |--------------------------------------------------------------------------
 */
 
@@ -19,26 +19,22 @@ Route::get('/', function () {
 });
 
 // ------------------------------------------------------------------------
-// 1. ROUTE GUEST (Hanya bisa diakses kalau BELUM login)
+// 1. ROUTE GUEST (Belum Login)
 // ------------------------------------------------------------------------
 Route::middleware('guest')->group(function () {
-    // Auth Login
-    Route::get('/login', 'AuthController@showLoginForm')->name('login');
-    Route::post('/login', 'AuthController@login')->name('login.post');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-    // Auth Registrasi
-    Route::get('/register', 'AuthController@showRegisterForm')->name('register');
-    Route::post('/register', 'AuthController@register')->name('register.post');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
 // ------------------------------------------------------------------------
-// 2. ROUTE AUTH UMUM (Bisa diakses SEMUA User yang sudah Login)
+// 2. ROUTE AUTH UMUM (Sudah Login)
 // ------------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
-    // Logout
-    Route::post('/logout', 'AuthController@logout')->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Dashboard Pengguna/User Umum
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -50,37 +46,37 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin,teknisi'])->group(function () {
 
     // --- PELANGGAN ---
-    Route::get('/pelanggan', 'PelangganController@index')->name('pelanggan.index');
-    Route::get('/pelanggan/create', 'PelangganController@create')->name('pelanggan.create');
-    Route::post('/pelanggan', 'PelangganController@store')->name('pelanggan.store');
-    Route::get('/pelanggan/{pelanggan}/edit', 'PelangganController@edit')->name('pelanggan.edit');
-    Route::put('/pelanggan/{pelanggan}', 'PelangganController@update')->name('pelanggan.update');
-    Route::delete('/pelanggan/{pelanggan}', 'PelangganController@destroy')->name('pelanggan.destroy');
+    Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
+    Route::get('/pelanggan/create', [PelangganController::class, 'create'])->name('pelanggan.create');
+    Route::post('/pelanggan', [PelangganController::class, 'store'])->name('pelanggan.store');
+    Route::get('/pelanggan/{pelanggan}/edit', [PelangganController::class, 'edit'])->name('pelanggan.edit');
+    Route::put('/pelanggan/{pelanggan}', [PelangganController::class, 'update'])->name('pelanggan.update');
+    Route::delete('/pelanggan/{pelanggan}', [PelangganController::class, 'destroy'])->name('pelanggan.destroy');
 
     // --- LAYANAN ---
-    Route::get('/layanan', 'LayananController@index')->name('layanan.index');
-    Route::get('/layanan/create', 'LayananController@create')->name('layanan.create');
-    Route::post('/layanan', 'LayananController@store')->name('layanan.store');
-    Route::get('/layanan/{layanan}/edit', 'LayananController@edit')->name('layanan.edit');
-    Route::put('/layanan/{layanan}', 'LayananController@update')->name('layanan.update');
-    Route::delete('/layanan/{layanan}', 'LayananController@destroy')->name('layanan.destroy');
+    Route::get('/layanan', [LayananController::class, 'index'])->name('layanan.index');
+    Route::get('/layanan/create', [LayananController::class, 'create'])->name('layanan.create');
+    Route::post('/layanan', [LayananController::class, 'store'])->name('layanan.store');
+    Route::get('/layanan/{layanan}/edit', [LayananController::class, 'edit'])->name('layanan.edit');
+    Route::put('/layanan/{layanan}', [LayananController::class, 'update'])->name('layanan.update');
+    Route::delete('/layanan/{layanan}', [LayananController::class, 'destroy'])->name('layanan.destroy');
 
     // --- BARANG (SPAREPART) ---
-    Route::get('/barang', 'BarangController@index')->name('barang.index');
-    Route::get('/barang/create', 'BarangController@create')->name('barang.create');
-    Route::post('/barang', 'BarangController@store')->name('barang.store');
-    Route::get('/barang/{barang}/edit', 'BarangController@edit')->name('barang.edit');
-    Route::put('/barang/{barang}', 'BarangController@update')->name('barang.update');
-    Route::delete('/barang/{barang}', 'BarangController@destroy')->name('barang.destroy');
+    Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
+    Route::get('/barang/create', [BarangController::class, 'create'])->name('barang.create');
+    Route::post('/barang', [BarangController::class, 'store'])->name('barang.store');
+    Route::get('/barang/{barang}/edit', [BarangController::class, 'edit'])->name('barang.edit');
+    Route::put('/barang/{barang}', [BarangController::class, 'update'])->name('barang.update');
+    Route::delete('/barang/{barang}', [BarangController::class, 'destroy'])->name('barang.destroy');
 
     // --- TRANSAKSI ---
-    Route::get('/transaksi', 'TransaksiController@index')->name('transaksi.index');
-    Route::get('/transaksi/create', 'TransaksiController@create')->name('transaksi.create');
-    Route::post('/transaksi', 'TransaksiController@store')->name('transaksi.store');
-    Route::get('/transaksi/{transaksi}', 'TransaksiController@show')->name('transaksi.show');
-    Route::get('/transaksi/{transaksi}/edit', 'TransaksiController@edit')->name('transaksi.edit');
-    Route::put('/transaksi/{transaksi}', 'TransaksiController@update')->name('transaksi.update');
-    Route::delete('/transaksi/{transaksi}', 'TransaksiController@destroy')->name('transaksi.destroy');
-    Route::patch('/transaksi/{transaksi}/update-status', 'TransaksiController@updateStatus')->name('transaksi.update-status');
+    Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/transaksi/{transaksi}', [TransaksiController::class, 'show'])->name('transaksi.show');
+    Route::get('/transaksi/{transaksi}/edit', [TransaksiController::class, 'edit'])->name('transaksi.edit');
+    Route::put('/transaksi/{transaksi}', [TransaksiController::class, 'update'])->name('transaksi.update');
+    Route::delete('/transaksi/{transaksi}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
+    Route::patch('/transaksi/{transaksi}/update-status', [TransaksiController::class, 'updateStatus'])->name('transaksi.update-status');
 
 });
