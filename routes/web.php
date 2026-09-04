@@ -9,21 +9,23 @@ use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes (Laravel 7 - Fixed Routing)
+| Web Routes
 |--------------------------------------------------------------------------
 */
 
-// Redirect Halaman Utama ke Login
+// ------------------------------------------------------------------------
+// LANDING PAGE (Publik - Bisa Diakses Siapa Saja)
+// ------------------------------------------------------------------------
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('landing');
+})->name('landing');
 
 // ------------------------------------------------------------------------
 // 1. ROUTE GUEST (Belum Login)
 // ------------------------------------------------------------------------
 Route::middleware('guest')->group(function () {
-    Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
