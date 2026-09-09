@@ -12,8 +12,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #020617; /* Slate 950 */
-            color: #f8fafc;
+            background-color: #f8fafc; /* Slate 50 (Putih Bersih) */
+            color: #1e293b; /* Slate 800 */
         }
         #wrapper {
             display: flex;
@@ -23,16 +23,16 @@
         #sidebar {
             min-width: 250px;
             max-width: 250px;
-            background: #0f172a; /* Slate 900 */
-            color: #fff;
+            background: #ffffff; /* Sidebar Putih */
+            color: #1e293b;
             transition: all 0.3s;
             min-height: 100vh;
-            border-right: 1px solid #1e293b; /* Slate 800 */
+            border-right: 1px solid #e2e8f0; /* Slate 200 */
         }
         #sidebar .sidebar-header {
             padding: 20px;
-            background: #020617; /* Slate 950 */
-            border-bottom: 1px solid #1e293b;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
         }
         #sidebar ul.components {
             padding: 20px 0;
@@ -41,32 +41,112 @@
             padding: 12px 20px;
             font-size: 0.95em;
             display: block;
-            color: #94a3b8; /* Slate 400 */
+            color: #64748b; /* Slate 500 */
             text-decoration: none;
+            font-weight: 500;
             transition: all 0.2s;
         }
         #sidebar ul li a:hover, 
         #sidebar ul li.active > a {
-            color: #fff;
-            background: #f97316; /* Orange 500 */
+            color: #f97316; /* Text Oranye */
+            background: #fff7ed; /* Light Orange Tint */
+            border-left: 4px solid #f97316; /* Aksen Border Oranye */
         }
         #content {
             width: 100%;
             padding: 0;
             min-height: 100vh;
-            background-color: #020617; /* Slate 950 */
+            background-color: #f8fafc;
         }
         .top-navbar {
-            background-color: #0f172a !important; /* Slate 900 */
-            border-bottom: 1px solid #1e293b !important; /* Slate 800 */
+            background-color: #ffffff !important; /* Navbar Putih */
+            border-bottom: 1px solid #e2e8f0 !important;
         }
+
+        /* --- STYLES CARD & TABEL TEMA PUTIH ORANYE --- */
+        
+        /* Card Container Putih dengan Shadow Halus & Border Oranye */
+        .card-seamless {
+            background-color: #ffffff !important;
+            border: 1px solid #fed7aa !important; /* Orange Border Light */
+            border-radius: 12px !important;
+            box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.06) !important;
+        }
+
+        /* Tabel Terang Tema Oranye */
+        .table-seamless {
+            color: #334155 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .table-seamless thead th {
+            background-color: #fff7ed !important; /* Oranye Soft Light */
+            color: #c2410c !important; /* Text Header Oranye Pekat */
+            border-bottom: 2px solid #fdba74 !important;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            padding: 14px 16px !important;
+        }
+
+        .table-seamless tbody tr {
+            border-bottom: 1px solid #f1f5f9 !important;
+            transition: background-color 0.2s ease;
+        }
+
+        .table-seamless tbody tr:hover {
+            background-color: #fff7ed/60 !important; /* Hover Effect Oranye Soft */
+        }
+
+        .table-seamless td {
+            color: #334155 !important;
+            padding: 14px 16px !important;
+            vertical-align: middle;
+            background-color: transparent !important;
+        }
+
+        /* Tombol Utama Oranye */
+        .btn-orange {
+            background-color: #f97316 !important;
+            color: #ffffff !important;
+            border: none !important;
+            font-weight: 500;
+        }
+        .btn-orange:hover {
+            background-color: #ea580c !important;
+            color: #ffffff !important;
+        }
+
         .btn-outline-orange {
-            color: #f97316;
-            border-color: #f97316;
+            color: #f97316 !important;
+            border-color: #f97316 !important;
+            background-color: transparent;
         }
         .btn-outline-orange:hover {
-            background-color: #f97316;
-            color: #fff;
+            background-color: #f97316 !important;
+            color: #ffffff !important;
+        }
+
+        /* Tombol Edit Soft Oranye */
+        .btn-orange-soft {
+            background-color: #ffedd5 !important;
+            color: #c2410c !important;
+            border: 1px solid #fed7aa !important;
+        }
+        .btn-orange-soft:hover {
+            background-color: #f97316 !important;
+            color: #ffffff !important;
+        }
+
+        /* Tombol Hapus Soft Merah */
+        .btn-danger-soft {
+            background-color: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 1px solid #fca5a5 !important;
+        }
+        .btn-danger-soft:hover {
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -76,8 +156,8 @@
     <!-- Sidebar -->
     <nav id="sidebar">
         <div class="sidebar-header d-flex align-items-center gap-2">
-            <i class="bi bi-wrench-adjustable fs-4 text-warning" style="color: #f97316 !important;"></i>
-            <h5 class="m-0 fw-bold text-white">BengkelKu</h5>
+            <i class="bi bi-wrench-adjustable fs-4" style="color: #f97316 !important;"></i>
+            <h5 class="m-0 fw-bold" style="color: #0f172a;">BengkelKu</h5>
         </div>
 
         <ul class="list-unstyled components">
@@ -104,11 +184,11 @@
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg top-navbar px-4 py-3">
             <div class="container-fluid p-0">
-                <span class="navbar-text fw-semibold text-slate-400" style="color: #94a3b8;">
+                <span class="navbar-text fw-semibold" style="color: #64748b;">
                     Panel Admin Bengkel
                 </span>
                 <div class="d-flex align-items-center gap-3 ms-auto">
-                    <span class="fw-medium text-white"><i class="bi bi-person-circle me-1 text-warning" style="color: #f97316 !important;"></i> {{ Auth::user()->name ?? 'Admin' }}</span>
+                    <span class="fw-medium" style="color: #1e293b;"><i class="bi bi-person-circle me-1" style="color: #f97316 !important;"></i> {{ Auth::user()->name ?? 'Admin' }}</span>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-outline-orange btn-sm">

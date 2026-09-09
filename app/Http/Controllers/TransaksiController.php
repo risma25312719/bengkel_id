@@ -72,6 +72,13 @@ class TransaksiController extends Controller
         return redirect()->route('transaksi.index')->with('success', 'Transaksi baru berhasil dibuat.');
     }
 
+    // --- METHOD SHOW (BARU) ---
+    public function show($id)
+    {
+        $transaksi = Transaksi::with(['pelanggan', 'user', 'layanan', 'barang'])->findOrFail($id);
+        return view('transaksi.show', compact('transaksi'));
+    }
+
     public function updateStatus(Request $request, Transaksi $transaksi)
     {
         $request->validate([
@@ -91,5 +98,23 @@ class TransaksiController extends Controller
         $transaksi->update($data);
 
         return redirect()->route('transaksi.index')->with('success', 'Status transaksi diperbarui.');
+    }
+
+    // --- METHOD DESTROY (BARU) ---
+    public function destroy($id)
+    {
+        $transaksi = Transaksi::findOrFail($id);
+        
+        // Kembalikan stok barang jika transaksi dihapus
+        if ($transaksi->barang_id && $transaksi->jumlah_barang) {
+            $barang = Barang::find($transaksi->barang_id);
+            if ($barang) {
+                $barang->increment('stok', $transaksi->jumlah_barang);
+            }
+        }
+
+        $transaksi->delete();
+
+        return redirect()->route('transaksi.index')->with('success', 'Data transaksi berhasil dihapus.');
     }
 }
