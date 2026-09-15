@@ -12,10 +12,12 @@ class Pelanggan extends Model
     protected $table = 'pelanggan';
 
     protected $fillable = [
-        'user_id',
-        'nama_pelanggan',
+        'name',
+        'nama_bengkel',
+        'email',
         'no_hp',
         'alamat',
+        'password'
     ];
 
     // Relasi balik ke User (Opsional)

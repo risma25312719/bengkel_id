@@ -16,9 +16,13 @@ class CreatePelangganTable extends Migration
         Schema::create('pelanggan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->string('nama_pelanggan');
+            $table->string('name');
+            $table->string('nama_bengkel');
+            $table->string('email')->unique();
             $table->string('no_hp');
-            $table->text('alamat');
+            $table->string('alamat');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->timestamps();
         });
     }

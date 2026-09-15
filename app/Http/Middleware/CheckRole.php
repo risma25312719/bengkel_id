@@ -3,25 +3,29 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  mixed  ...$roles
-     * @return mixed
-     */
-    public function handle($request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        // Cek apakah user sudah login dan role-nya sesuai
-        if ($request->user() && in_array($request->user()->role, $roles)) {
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+
+        $user = Auth::user();
+
+        // Cek apakah role user ada di dalam daftar role yang diizinkan
+        if (in_array($user->role, $roles)) {
             return $next($request);
         }
 
-        // Jika tidak sesuai role-nya, kembalikan error 403
-        abort(403, 'Kamu tidak punya akses ke halaman ini.');
+        // Jika pelanggan mencoba akses halaman pemilik/teknisi, lempar ke halaman pantau servis
+        if ($user->role === 'pelanggan') {
+            return redirect('/status-servis')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
+        }
+
+        return redirect('/')->with('error', 'Akses ditolak.');
     }
 }

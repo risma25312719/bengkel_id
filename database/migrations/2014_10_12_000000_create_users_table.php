@@ -13,16 +13,19 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->enum('role', ['admin', 'teknisi', 'pelanggan'])->default('pelanggan');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('nama_bengkel');
+    $table->string('email')->unique();
+    $table->string('no_hp');
+    $table->string('alamat');
+    $table->timestamp('email_verified_at')->nullable();
+    $table->string('password');
+    $table->enum('role', ['pemilik_bengkel', 'teknisi', 'pelanggan'])->default('pelanggan');
+    $table->rememberToken();
+    $table->timestamps();
+});
     }
 
     /**

@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // --- LOGIN ---
+    // --- 1. TAMPILKAN FORM LOGIN ---
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth.login'); // Pastikan nama file view sesuai (resources/views/auth/login.blade.php)
     }
 
+    // --- 2. PROSES LOGIN ---
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -26,11 +27,16 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if (in_array($user->role, ['admin', 'teknisi'])) {
+
+            if ($user->role === 'pemilik_bengkel') {
+                return redirect()->intended('/dashboard');
+            }
+
+            if ($user->role === 'teknisi') {
                 return redirect()->intended('/transaksi');
             }
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/status-servis');
         }
 
         return back()->withErrors([
@@ -38,39 +44,43 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // --- REGISTRASI ---
+    // --- 3. TAMPILKAN FORM REGISTER ---
     public function showRegisterForm()
     {
-        return view('auth.register');
+        return view('auth.register'); // Pastikan nama file view sesuai (resources/views/auth/register.blade.php)
     }
 
+    // --- 4. PROSES REGISTER ---
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'name'         => 'required|string|max:255',
+            'nama_bengkel' => 'required|string|max:255',
+            'email'        => 'required|string|email|max:255|unique:users',
+            'no_hp'        => 'required|string',
+            'alamat'       => 'required|string|max:255',
+            'password'     => 'required|string|min:6|confirmed',
         ]);
 
-        // Buat user baru (Default role: 'pengguna')
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'pengguna',
+            'name'         => $request->name,
+            'nama_bengkel' => $request->nama_bengkel,
+            'email'        => $request->email,
+            'no_hp'        => $request->no_hp,
+            'alamat'       => $request->alamat,
+            'password'     => Hash::make($request->password),
+            'role'         => 'pemilik_bengkel',
         ]);
 
-        // Otomatis login setelah registrasi
         Auth::login($user);
 
-        return redirect('/dashboard')->with('success', 'Akun berhasil dibuat!');
+        return redirect('/dashboard')->with('success', 'Bengkel berhasil didaftarkan!');
     }
 
-    // --- LOGOUT ---
+    // --- 5. PROSES LOGOUT ---
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

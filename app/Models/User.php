@@ -12,9 +12,12 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'nama_bengkel',
         'email',
+        'no_hp',
+        'alamat',
         'password',
-        'role',
+        'role', // Wajib dimasukkan ke fillable
     ];
 
     protected $hidden = [
@@ -22,13 +25,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Relasi ke tabel Pelanggan (jika user ini bertipe role 'pengguna')
-    public function pelanggan()
-    {
-        return $this->hasOne(Pelanggan::class);
-    }
-
-    // Relasi ke Transaksi yang ditangani oleh User ini (Admin/Teknisi)
+    // Relasi ke Transaksi
     public function transaksi()
     {
         return $this->hasMany(Transaksi::class);

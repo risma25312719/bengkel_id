@@ -6,6 +6,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\TransaksiController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +14,13 @@ use App\Http\Controllers\TransaksiController;
 |--------------------------------------------------------------------------
 */
 
-// ------------------------------------------------------------------------
-// LANDING PAGE (Publik - Bisa Diakses Siapa Saja)
-// ------------------------------------------------------------------------
+// LANDING PAGE (Publik - Menampilkan Semua Mitra Bengkel)
 Route::get('/', function () {
-    return view('landing');
+    $bengkelList = User::where('role', 'pemilik_bengkel')->get();
+    return view('landing', compact('bengkelList'));
 })->name('landing');
 
-// ------------------------------------------------------------------------
 // 1. ROUTE GUEST (Belum Login)
-// ------------------------------------------------------------------------
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -31,21 +29,24 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
-// ------------------------------------------------------------------------
-// 2. ROUTE AUTH UMUM (Sudah Login)
-// ------------------------------------------------------------------------
+// 2. ROUTE AUTH UMUM (Semua User yang Login)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // Pengajuan Servis dari Pelanggan ke Bengkel Tujuan
+    Route::get('/lapor-servis/{bengkel}', [TransaksiController::class, 'createPelanggan'])->name('servis.create');
+    Route::post('/lapor-servis', [TransaksiController::class, 'storePelanggan'])->name('servis.store');
+});
+
+// 3. KHUSUS PEMILIK BENGKEL (Dashboard Utama)
+Route::middleware(['auth', 'role:pemilik_bengkel'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 });
 
-// ------------------------------------------------------------------------
-// 3. ROUTE KHUSUS (Hanya ADMIN & TEKNISI)
-// ------------------------------------------------------------------------
-Route::middleware(['auth', 'role:admin,teknisi'])->group(function () {
+// 4. KHUSUS OPERASIONAL (PEMILIK BENGKEL & TEKNISI)
+Route::middleware(['auth', 'role:pemilik_bengkel,teknisi'])->group(function () {
 
     // --- PELANGGAN ---
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
@@ -81,4 +82,9 @@ Route::middleware(['auth', 'role:admin,teknisi'])->group(function () {
     Route::delete('/transaksi/{transaksi}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
     Route::patch('/transaksi/{transaksi}/update-status', [TransaksiController::class, 'updateStatus'])->name('transaksi.update-status');
 
+});
+
+// 5. KHUSUS PELANGGAN (Pantau Servis)
+Route::middleware(['auth', 'role:pelanggan'])->group(function () {
+    Route::get('/status-servis', [TransaksiController::class, 'pelangganIndex'])->name('pelanggan.status');
 });
