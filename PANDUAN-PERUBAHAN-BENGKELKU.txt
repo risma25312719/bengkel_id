@@ -1,0 +1,34 @@
+PANDUAN PERUBAHAN BENGKELKU
+
+Konsep akun:
+- admin: pemilik aplikasi, memverifikasi pendaftaran melalui /admin/bengkel
+- teknisi: pemilik/pendaftar bengkel, daftar melalui /register, status awal pending
+- pelanggan: daftar melalui /register-pelanggan
+
+Login:
+Semua role menggunakan satu halaman /login dengan email dan password.
+
+Alur teknisi/pemilik bengkel:
+1. Isi formulir Daftarkan Bengkel.
+2. Data disimpan dengan status_bengkel=pending.
+3. Admin login dan membuka menu Verifikasi Bengkel.
+4. Admin menyetujui atau menolak pendaftaran.
+5. Hanya bengkel berstatus approved yang tampil di beranda.
+6. Teknisi/pemilik bengkel yang sudah disetujui dapat login kembali ke /dashboard.
+
+PENTING - SETELAH MENGGANTI FILE:
+1. Backup database terlebih dahulu.
+2. Pastikan konfigurasi database pada .env benar.
+3. Jalankan: php artisan migrate
+4. Jika tabel users sudah pernah dibuat, migration tambahan akan menambahkan status_bengkel, latitude, longitude, mengubah role menjadi VARCHAR, dan menjadikan nama_bengkel/no_hp/alamat nullable (MySQL).
+5. Untuk membuat akun admin jika belum ada, jalankan: php artisan db:seed --class=UserSeeder
+
+Akun admin dari UserSeeder:
+Email: admin@gmail.com
+Password: password123
+Segera ganti password admin setelah login.
+
+Catatan pengembangan:
+- Pengurutan bengkel terdekat menggunakan geolocation browser dan koordinat bengkel yang disimpan saat pemilik mendaftar. Jika pengguna menolak izin lokasi atau koordinat bengkel kosong, daftar tampil dengan urutan biasa.
+- Tombol Pilih Bengkel Ini membuka WhatsApp bengkel.
+- Modul operasional lama (pelanggan internal, layanan, barang, transaksi) masih mengikuti struktur lama. Sebelum aplikasi dipakai banyak bengkel secara bersamaan, perlu tahap isolasi data per pemilik/bengkel (foreign key pemilik_bengkel_id pada data operasional dan pembatasan query per akun).
