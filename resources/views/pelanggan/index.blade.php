@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Data Pelanggan')
@@ -17,9 +16,7 @@
 <div class="card card-seamless overflow-hidden">
     <div class="card-body p-0">
         <div class="table-responsive">
-
             <table class="table table-seamless align-middle">
-
                 <thead>
                     <tr>
                         <th width="5%" class="text-center">No</th>
@@ -31,9 +28,7 @@
                 </thead>
 
                 <tbody>
-
                     @forelse ($pelanggan as $item)
-
                     <tr>
                         <td class="text-center fw-semibold">
                             {{ $loop->iteration }}
@@ -43,13 +38,9 @@
                             {{ $item->name }}
                         </td>
 
-                        <td>
-                            {{ $item->email }}
-                        </td>
+                        <td>{{ $item->email }}</td>
 
-                        <td>
-                            {{ $item->no_hp ?? '-' }}
-                        </td>
+                        <td>{{ $item->no_hp ?? '-' }}</td>
 
                         <td>
                             <span class="badge bg-success">
@@ -59,7 +50,6 @@
                     </tr>
 
                     @empty
-
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
                             <i class="bi bi-people fs-1 d-block mb-2"></i>
@@ -69,13 +59,9 @@
                             </small>
                         </td>
                     </tr>
-
                     @endforelse
-
                 </tbody>
-
             </table>
-
         </div>
     </div>
 </div>

@@ -20,12 +20,14 @@ class RedirectIfAuthenticated
                     return redirect('/admin/bengkel');
                 }
 
-                if ($user->role === 'pemilik_bengkel') {
-                    return redirect('/dashboard');
-                }
-
                 if ($user->role === 'teknisi') {
-                    return redirect('/transaksi');
+                    if ($user->status_bengkel !== 'approved') {
+                        Auth::guard($guard)->logout();
+
+                        return redirect('/login');
+                    }
+
+                    return redirect('/dashboard');
                 }
 
                 return redirect('/status-servis');

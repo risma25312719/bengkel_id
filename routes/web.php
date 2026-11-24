@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -13,7 +12,10 @@ use App\Http\Controllers\AdminBengkelController;
 use App\Models\User;
 
 
+// ==========================================
 // LANDING PAGE
+// ==========================================
+
 Route::get('/', function () {
     $bengkelList = User::where('role', 'teknisi')
         ->where('status_bengkel', 'approved')
@@ -23,26 +25,47 @@ Route::get('/', function () {
     return view('landing', compact('bengkelList'));
 })->name('landing');
 
+
+// ==========================================
 // LOGIN DAN REGISTER
+// ==========================================
+
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])
+        ->name('login');
 
-    Route::get('/register-pelanggan', [AuthController::class, 'showCustomerRegisterForm'])->name('register.customer');
-    Route::post('/register-pelanggan', [AuthController::class, 'registerCustomer'])->name('register.customer.post');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('login.post');
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])
+        ->name('register');
+
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.post');
+
+    Route::get('/register-pelanggan', [AuthController::class, 'showCustomerRegisterForm'])
+        ->name('register.customer');
+
+    Route::post('/register-pelanggan', [AuthController::class, 'registerCustomer'])
+        ->name('register.customer.post');
 });
 
 
+// ==========================================
 // LOGOUT
+// ==========================================
+
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('logout');
 });
 
 
+// ==========================================
 // ADMIN
+// ==========================================
+
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -59,19 +82,24 @@ Route::middleware(['auth', 'role:admin'])
     });
 
 
-// DASHBOARD TEKNISI
+// ==========================================
+// DASHBOARD DAN OPERASIONAL TEKNISI
+// ==========================================
+
 Route::middleware(['auth', 'role:teknisi'])->group(function () {
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // Pengajuan Servis
     Route::get('/pengajuan-servis', [PengajuanServisController::class, 'index'])
         ->name('pengajuan-servis.index');
 
     Route::patch('/pengajuan-servis/{pengajuanServis}', [PengajuanServisController::class, 'updateStatus'])
         ->name('pengajuan-servis.update-status');
 
+    // Data Pelanggan
     Route::get('/pelanggan', [PelangganController::class, 'index'])
         ->name('pelanggan.index');
 
@@ -90,11 +118,17 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
     Route::delete('/pelanggan/{pelanggan}', [PelangganController::class, 'destroy'])
         ->name('pelanggan.destroy');
 
-    Route::resource('layanan', LayananController::class)->except(['show']);
+    // Layanan
+    Route::resource('layanan', LayananController::class)
+        ->except(['show']);
 
-    Route::resource('barang', BarangController::class)->except(['show']);
+    // Barang
+    Route::resource('barang', BarangController::class)
+        ->except(['show']);
 
-    Route::resource('transaksi', TransaksiController::class)->except(['store']);
+    // Transaksi
+    Route::resource('transaksi', TransaksiController::class)
+        ->except(['store']);
 
     Route::post('/transaksi', [TransaksiController::class, 'store'])
         ->name('transaksi.store');
@@ -104,15 +138,21 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
 });
 
 
+// ==========================================
 // PELANGGAN
+// ==========================================
+
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 
+    // Dashboard Bengkel
     Route::get('/bengkel/{bengkel}/dashboard', [BengkelController::class, 'customerDashboard'])
         ->name('bengkel.dashboard');
 
+    // Mengajukan Servis
     Route::post('/bengkel/{bengkel}/pengajuan-servis', [PengajuanServisController::class, 'store'])
         ->name('pengajuan-servis.store');
 
+    // Status Servis
     Route::get('/status-servis', [PengajuanServisController::class, 'customerIndex'])
         ->name('pelanggan.status');
 });

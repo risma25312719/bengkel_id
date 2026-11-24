@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - BengkelKu</title>
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
     <style>
-        * { font-family: 'Inter', sans-serif; }
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 50%, #fed7aa 100%);
             min-height: 100vh;
@@ -22,6 +29,7 @@
             position: relative;
             overflow-x: hidden;
         }
+
         .login-card {
             border: none;
             border-radius: 20px;
@@ -33,20 +41,31 @@
             z-index: 1;
             overflow: hidden;
         }
+
         .login-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
             background: linear-gradient(90deg, #ea580c, #f97316, #ea580c);
         }
+
         .brand-icon {
-            width: 64px; height: 64px;
+            width: 64px;
+            height: 64px;
             background: linear-gradient(135deg, #ea580c, #c2410c);
             border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px; color: white; margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            margin: 0 auto 16px;
             box-shadow: 0 8px 24px rgba(234, 88, 12, 0.3);
         }
+
         .form-control {
             border-radius: 12px;
             padding: 12px 16px;
@@ -55,72 +74,168 @@
             font-size: 14px;
             background: #fafafa;
         }
+
         .form-control:focus {
             border-color: #ea580c;
             box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
             background: white;
         }
+
         .btn-primary-custom {
             background: linear-gradient(135deg, #ea580c, #c2410c);
-            border: none; border-radius: 12px; padding: 12px;
-            font-weight: 700; font-size: 15px; color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
             box-shadow: 0 4px 16px rgba(234, 88, 12, 0.3);
         }
-        .btn-primary-custom:hover { color: white; transform: translateY(-2px); }
-        .link-custom { color: #ea580c; text-decoration: none; font-weight: 600; }
-        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 2px solid #f3f4f6; }
-        .divider::before { margin-right: 16px; } .divider::after { margin-left: 16px; }
-        .divider-text { color: #9ca3af; font-size: 12px; font-weight: 500; }
+
+        .btn-primary-custom:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .link-custom {
+            color: #ea580c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .divider::before {
+            margin-right: 16px;
+        }
+
+        .divider::after {
+            margin-left: 16px;
+        }
+
+        .divider-text {
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
         .password-toggle {
-            position: absolute; right: 16px; top: 50%;
-            transform: translateY(-50%); background: none; border: none;
-            color: #9ca3af; cursor: pointer; padding: 0; font-size: 14px;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            font-size: 14px;
         }
-        .floating-label-group { position: relative; margin-bottom: 18px; }
-        .floating-label-group .form-control { padding-top: 16px; padding-bottom: 6px; }
+
+        .floating-label-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .floating-label-group .form-control {
+            padding-top: 16px;
+            padding-bottom: 6px;
+        }
+
         .floating-label-group .form-label {
-            position: absolute; top: 12px; left: 16px;
-            font-size: 13px; color: #9ca3af; transition: all 0.2s ease;
-            pointer-events: none; margin: 0; padding: 0 4px;
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-size: 13px;
+            color: #9ca3af;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            margin: 0;
+            padding: 0 4px;
         }
+
         .floating-label-group .form-control:focus ~ .form-label,
         .floating-label-group .form-control:not(:placeholder-shown) ~ .form-label {
-            top: -8px; left: 12px; font-size: 11px; color: #ea580c;
-            background: white; font-weight: 600;
+            top: -8px;
+            left: 12px;
+            font-size: 11px;
+            color: #ea580c;
+            background: white;
+            font-weight: 600;
         }
-        .form-check-input:checked { background-color: #ea580c; border-color: #ea580c; }
+
+        .form-check-input:checked {
+            background-color: #ea580c;
+            border-color: #ea580c;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
+
                 <div class="login-card p-4 p-md-5">
 
                     <div class="text-center">
                         <div class="brand-icon">
                             <i class="fas fa-wrench"></i>
                         </div>
-                        <h4 class="fw-bold text-gray-800 mb-1">Bengkel<span style="color: #ea580c;">Ku</span></h4>
-                        <p class="text-muted small mb-0">Masuk ke Akun BengkelKu</p>
+
+                        <h4 class="fw-bold text-gray-800 mb-1">
+                            Bengkel<span style="color: #ea580c;">Ku</span>
+                        </h4>
+
+                        <p class="text-muted small mb-0">
+                            Masuk ke Akun BengkelKu
+                        </p>
+
                         <div class="divider mt-3">
                             <span class="divider-text">MASUK AKUN</span>
                         </div>
                     </div>
 
                     @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert" style="border-radius: 12px; border: none; font-size: 13px;">
-                            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="alert alert-success alert-dismissible fade show mt-3"
+                             role="alert"
+                             style="border-radius: 12px; border: none; font-size: 13px;">
+
+                            <i class="fas fa-check-circle me-2"></i>
+                            {{ session('success') }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
                         </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="border-radius: 12px; border: none; font-size: 13px;">
-                            <i class="fas fa-exclamation-circle me-2"></i>{{ $errors->first() }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="alert alert-danger alert-dismissible fade show mt-3"
+                             role="alert"
+                             style="border-radius: 12px; border: none; font-size: 13px;">
+
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ $errors->first() }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
                         </div>
                     @endif
 
@@ -129,45 +244,100 @@
 
                         <!-- Email -->
                         <div class="floating-label-group">
-                            <input type="email" name="email" id="email" 
-                                   class="form-control @error('email') is-invalid @enderror" 
-                                   value="{{ old('email') }}" required placeholder=" ">
-                            <label for="email" class="form-label">Alamat Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                value="{{ old('email') }}"
+                                required
+                                autofocus
+                                placeholder=" "
+                            >
+
+                            <label for="email" class="form-label">
+                                Alamat Email
+                            </label>
                         </div>
 
                         <!-- Password -->
                         <div class="floating-label-group position-relative">
-                            <input type="password" name="password" id="password" 
-                                   class="form-control @error('password') is-invalid @enderror" 
-                                   required placeholder=" ">
-                            <label for="password" class="form-label">Kata Sandi</label>
-                            <button type="button" class="password-toggle" id="togglePassword">
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                required
+                                placeholder=" "
+                            >
+
+                            <label for="password" class="form-label">
+                                Kata Sandi
+                            </label>
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    id="togglePassword">
+
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
 
+                        <!-- Remember Me -->
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                <label class="form-check-label small text-muted" for="remember">Ingat Saya</label>
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="remember"
+                                    id="remember"
+                                >
+
+                                <label class="form-check-label small text-muted"
+                                       for="remember">
+                                    Ingat Saya
+                                </label>
                             </div>
-                            <a href="#" class="small link-custom">Lupa Kata Sandi?</a>
+
+                            <a href="#" class="small link-custom">
+                                Lupa Kata Sandi?
+                            </a>
                         </div>
 
+                        <!-- Tombol Login -->
                         <button type="submit" class="btn btn-primary-custom w-100">
-                            <i class="fas fa-sign-in-alt me-2"></i> Masuk Sekarang
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Masuk Sekarang
                         </button>
+
                     </form>
 
+                    <!-- Daftar Akun -->
                     <div class="text-center mt-4">
-                        <span class="small text-muted">Belum punya akun? </span>
-                        <a href="{{ route('register.customer') }}" class="small link-custom">Daftar sebagai Pelanggan</a>
+                        <span class="small text-muted">
+                            Belum punya akun?
+                        </span>
+
+                        <a href="{{ route('register.customer') }}"
+                           class="small link-custom">
+                            Daftar sebagai Pelanggan
+                        </a>
                     </div>
-                    <div class="text-center mt-2"><a href="{{ route('register') }}" class="small link-custom">Daftarkan Bengkel Anda</a></div>
 
                     <div class="text-center mt-2">
-                        <a href="/" class="small text-muted text-decoration-none">
-                            <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+                        <a href="{{ route('register') }}"
+                           class="small link-custom">
+                            Daftarkan Bengkel Anda
+                        </a>
+                    </div>
+
+                    <!-- Kembali -->
+                    <div class="text-center mt-3">
+                        <a href="/"
+                           class="small text-muted text-decoration-none">
+
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Kembali ke Beranda
                         </a>
                     </div>
 
@@ -176,11 +346,15 @@
         </div>
     </div>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toggle Password -->
     <script>
-        document.getElementById('togglePassword')?.addEventListener('click', function() {
+        document.getElementById('togglePassword')?.addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.replace('fa-eye', 'fa-eye-slash');
@@ -190,5 +364,6 @@
             }
         });
     </script>
+
 </body>
 </html>
